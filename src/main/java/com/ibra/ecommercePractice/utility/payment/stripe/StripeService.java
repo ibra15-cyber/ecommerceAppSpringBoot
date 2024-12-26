@@ -1,4 +1,4 @@
-package com.ibra.ecommercePractice.utility.stripe;
+package com.ibra.ecommercePractice.utility.payment.stripe;
 
 import com.stripe.Stripe;
 import com.stripe.exception.StripeException;

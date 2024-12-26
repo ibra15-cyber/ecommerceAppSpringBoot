@@ -1,23 +1,17 @@
-package com.ibra.ecommercePractice.utility.paypal;
+package com.ibra.ecommercePractice.utility.payment;
 
-import com.amazonaws.Response;
-import com.ibra.ecommercePractice.dto.OrderDto;
-import com.ibra.ecommercePractice.dto.OrderRequest;
 import com.ibra.ecommercePractice.enums.OrderStatus;
 import com.ibra.ecommercePractice.model.User;
 import com.ibra.ecommercePractice.service.interf.OrderService;
 import com.ibra.ecommercePractice.service.interf.UserService;
 import com.ibra.ecommercePractice.model.Order;
-import com.ibra.ecommercePractice.utility.stripe.StripeService;
+import com.ibra.ecommercePractice.utility.payment.stripe.StripeService;
 import com.paypal.api.payments.*;
 import com.paypal.base.rest.APIContext;
 import com.paypal.base.rest.PayPalRESTException;
-import com.stripe.Stripe;
 import com.stripe.exception.StripeException;
-import com.stripe.model.PaymentIntent;
 import com.stripe.model.checkout.Session;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -140,8 +134,9 @@ public class PaymentController {
             Session session = stripeService.createCheckoutSession(amount);
             // Return the checkout URL directly
 
-            System.out.println(session);
+            System.out.println(session.getUrl());
             return session.getUrl();
+
         } catch (StripeException e) {
             System.out.println(e.getMessage());
             e.printStackTrace();

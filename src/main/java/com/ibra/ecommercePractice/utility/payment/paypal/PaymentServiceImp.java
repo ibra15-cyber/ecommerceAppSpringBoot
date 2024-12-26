@@ -1,4 +1,4 @@
-package com.ibra.ecommercePractice.utility.paypal;
+package com.ibra.ecommercePractice.utility.payment.paypal;
 
 import org.springframework.stereotype.Service;
 
