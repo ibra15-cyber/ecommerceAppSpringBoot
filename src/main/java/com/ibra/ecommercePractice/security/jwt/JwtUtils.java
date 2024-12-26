@@ -1,4 +1,4 @@
-package com.ibra.ecommercePractice.security;
+package com.ibra.ecommercePractice.security.jwt;
 
 import com.ibra.ecommercePractice.model.User;
 import io.jsonwebtoken.Claims;
@@ -67,6 +67,4 @@ public class JwtUtils {
     private boolean isTokenExpired(String token) {
         return extractClaims(token, Claims::getExpiration).before(new Date());
     }
-
-
 }

@@ -1,4 +1,4 @@
-package com.ibra.ecommercePractice.service;
+package com.ibra.ecommercePractice.utility.cloudinary;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;

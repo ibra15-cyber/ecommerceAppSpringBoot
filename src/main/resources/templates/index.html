@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>PayPal Payment</title>
+</head>
+<body>
+<form th:action="@{/pay}" method="post">
+    Amount: <input type="text" name="amount" />
+<!--    PaymentMethod: <input type="text" name="method" />-->
+    <button type="submit">Pay with PayPal</button>
+</form>
+</body>
+</html>

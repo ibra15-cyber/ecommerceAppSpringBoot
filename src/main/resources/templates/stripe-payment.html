@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Stripe Payment</title>
+    <script src="https://js.stripe.com/v3/"></script>
+    <style>
+        .StripeElement {
+            box-sizing: border-box;
+            height: 40px;
+            padding: 10px 12px;
+            border: 1px solid #ccd0d2;
+            border-radius: 4px;
+            background-color: white;
+            box-shadow: 0 1px 3px 0 #e6ebf1;
+            transition: box-shadow 150ms ease;
+        }
+
+        .StripeElement--focus {
+            box-shadow: 0 1px 3px 0 #cfd7df;
+        }
+
+        .StripeElement--invalid {
+            border-color: #fa755a;
+        }
+
+        .StripeElement--webkit-autofill {
+            background-color: #fefde5 !important;
+        }
+    </style>
+</head>
+<body>
+<h1>Stripe Payment</h1>
+<form id="payment-form">
+    <div id="card-element">
+        <!-- A Stripe Element will be inserted here. -->
+    </div>
+    <button id="submit">Pay</button>
+    <div id="error-message">
+        <!-- Display error message to your customers here -->
+    </div>
+</form>
+<script>
+    // Your Stripe publishable key
+    var stripe = Stripe('pk_test_51QZf2ZRmAYeSATFhC1E2IxkIAmMt6ksxou8ClGuQTPAlT502eJQGFkSTvghEO2cdSAZvlO6ny1FouSiJSAlWo3MP00LEr9hjak');
+
+    // Create an instance of Elements
+    var elements = stripe.elements();
+
+    // Create an instance of the card Element
+    var card = elements.create('card');
+
+    // Add an instance of the card Element into the `card-element` <div>
+    card.mount('#card-element');
+
+    // Handle form submission
+    var form = document.getElementById('payment-form');
+    form.addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        stripe.confirmCardPayment("{{paymentIntentClientSecret}}", {
+            payment_method: {
+                card: card,
+                billing_details: {
+                    name: 'Jenny Rosen', // You can dynamically set this based on user input
+                },
+            }
+        }).then(function(result) {
+            if (result.error) {
+                // Show error to your customer (e.g., insufficient funds)
+                document.getElementById('error-message').textContent = result.error.message;
+            } else {
+                // The payment has been processed!
+                if (result.paymentIntent.status === 'succeeded') {
+                    console.log('Payment succeeded:', result.paymentIntent);
+                    window.location.href = "/success";
+                } else {
+                    console.log('Payment status:', result.paymentIntent.status);
+                }
+            }
+        });
+    });
+</script>
+</body>
+</html>

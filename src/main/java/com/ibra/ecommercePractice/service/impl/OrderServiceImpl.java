@@ -8,10 +8,8 @@ import com.ibra.ecommercePractice.model.Order;
 import com.ibra.ecommercePractice.model.OrderItem;
 import com.ibra.ecommercePractice.model.Product;
 import com.ibra.ecommercePractice.model.User;
-import com.ibra.ecommercePractice.repository.OrderItemRepository;
 import com.ibra.ecommercePractice.repository.OrderRepository;
 import com.ibra.ecommercePractice.repository.ProductRepository;
-import com.ibra.ecommercePractice.service.interf.OrderItemService;
 import com.ibra.ecommercePractice.service.interf.OrderService;
 import com.ibra.ecommercePractice.service.interf.UserService;
 import com.ibra.ecommercePractice.specification.OrderItemSpecification;
@@ -22,11 +20,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -35,16 +32,17 @@ public class OrderServiceImpl implements OrderService {
 
     private final UserService userService;
     private final ProductRepository productRepository;
-    private final OrderRepository orderRepository;
     private final EntityDtoMapper entityDtoMapper;
+    private final OrderRepository orderRepository;
 //    private final OrderItemRepository orderItemRepository;
 
-    public OrderServiceImpl(UserService userService, ProductRepository productRepository, OrderRepository orderRepository, EntityDtoMapper entityDtoMapper, OrderItemRepository orderItemRepository) {
+    public OrderServiceImpl(UserService userService, ProductRepository productRepository,
+                            EntityDtoMapper entityDtoMapper, OrderRepository orderRepository) {
         this.userService = userService;
         this.productRepository = productRepository;
-        this.orderRepository = orderRepository;
         this.entityDtoMapper = entityDtoMapper;
 //        this.orderItemRepository = orderItemRepository;
+        this.orderRepository = orderRepository;
     }
 
     @Override
@@ -85,6 +83,7 @@ public class OrderServiceImpl implements OrderService {
         order.setOrderItemList(orderItems);
         order.setTotalPrice(totalPrice);
         order.setUser(user);
+        order.setPayMethod(orderRequest.getPaymentInfo().getMethod());
 //        order.setStatus(orderRequest.getOrderStatus());
         order.setStatus(OrderStatus.PENDING);
 
@@ -166,6 +165,22 @@ public class OrderServiceImpl implements OrderService {
                 .map(entityDtoMapper::mapOrderToOrderDto).collect(Collectors.toList());
 
         return Response.builder()
+                .orderDtoList(orderDtoList)
+                .build();
+    }
+
+    @Override
+    public Response getMyOrders() {
+        User user = userService.getLoginUser(); //get the user that is sign in from the authentication token
+
+        List<Order> listOfOrders = user.getOrderList(); //get his orderList
+        Optional<Order> order = listOfOrders.stream().findAny();
+
+        List<OrderDto> orderDtoList = listOfOrders.stream().map(entityDtoMapper::mapOrderToOrderDto).collect(Collectors.toList());
+
+
+        return Response.builder()
+                .status(200)
                 .orderDtoList(orderDtoList)
                 .build();
     }

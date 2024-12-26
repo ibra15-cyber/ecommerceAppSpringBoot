@@ -4,6 +4,8 @@ import com.ibra.ecommercePractice.dto.OrderFilterRequest;
 import com.ibra.ecommercePractice.dto.OrderRequest;
 import com.ibra.ecommercePractice.dto.Response;
 import com.ibra.ecommercePractice.enums.OrderStatus;
+import com.ibra.ecommercePractice.model.User;
+import com.ibra.ecommercePractice.service.impl.UserServiceImp;
 import com.ibra.ecommercePractice.service.interf.OrderItemService;
 import com.ibra.ecommercePractice.service.interf.OrderService;
 import org.springframework.data.domain.PageRequest;
@@ -22,9 +24,11 @@ import java.time.LocalDateTime;
 public class OrderController {
 
     private final OrderService orderService;
+    private final UserServiceImp userServiceImp;
 
-    public OrderController(OrderService orderService) {
+    public OrderController(OrderService orderService, UserServiceImp userServiceImp) {
         this.orderService = orderService;
+        this.userServiceImp = userServiceImp;
     }
 
     @PostMapping("/create")
@@ -46,10 +50,17 @@ public class OrderController {
     }
 
 
+    @PreAuthorize("hasAuthority('USER')")
+    @GetMapping("/mine")
+    public ResponseEntity<Response> getMyOrders(){
+        return ResponseEntity.status(HttpStatus.OK).body(orderService.getMyOrders());
+    }
+
+
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/filter")
-    public ResponseEntity<Response> filterOderItems(
+    public ResponseEntity<Response> filterOrderItems(
 //            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDate,
 //            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDate,
 //            @RequestParam(required = false) OrderStatus status,

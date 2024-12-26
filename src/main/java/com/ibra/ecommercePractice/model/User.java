@@ -52,29 +52,29 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(message = "name is required")
+//    @NotBlank(message = "name is required")
     private String name;
 
     @Column(unique = true)
-    @NotBlank(message = "Email is required")
+//    @NotBlank(message = "Email is required")
     private String email;
 
     @Column(name="Password")
-    @NotBlank(message = "Password must be entered")
+//    @NotBlank(message = "Password must be entered")
     private String password;
 
     @Column(name="phone_number")
-    @NotBlank(message = "Phone number must be entered")
+//    @NotBlank(message = "Phone number must be entered")
     private String phoneNumber;
 
     //    @Enumerated
     private UserRole role;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<Order> orderList;
-
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Address address;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Order> orderList;
 
     private final LocalDateTime createdAt = LocalDateTime.now();
 

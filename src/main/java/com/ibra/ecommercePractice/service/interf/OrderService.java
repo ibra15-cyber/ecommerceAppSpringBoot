@@ -15,4 +15,7 @@ public interface OrderService {
 //    Response filterOrderItems(OrderStatus ordStatus, LocalDateTime startDate, LocalDateTime endTime, Long itemId, int pageNumber,int pageSize);
     Response filterOrderItems(OrderFilterRequest orderFilterRequest);
     Response getAllOrders();
+
+    Response getMyOrders();
+
 }

@@ -15,7 +15,7 @@ public class AddressServiceImp implements AddressService {
 
     private final AddressRepository addressRepository;
     private final EntityDtoMapper entityDtoMapper;
-    UserService userService;
+    private final UserService userService;
 
     public AddressServiceImp(UserService userService, AddressRepository addressRepository, EntityDtoMapper entityDtoMapper) {
         this.userService = userService;

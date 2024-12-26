@@ -1,5 +1,5 @@
 package com.ibra.ecommercePractice.controller;
-import com.ibra.ecommercePractice.service.CloudinaryUploadService;
+import com.ibra.ecommercePractice.utility.cloudinary.CloudinaryUploadService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

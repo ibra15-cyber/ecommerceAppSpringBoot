@@ -212,6 +212,7 @@ public class EntityDtoMapper {
 //        orderDto.setUserDto(mapUserToUserDto(order.getUser()));
         orderDto.setUsername(mapUserToUserDto(order.getUser()).getName());
         orderDto.setId(order.getId());
+        orderDto.setTotalPrice(order.getTotalPrice());
 
         //same here, orderItemList returns List<OrderItem> but oderItemDtoList returns List<OrderItemDto>
         orderDto.setOrderItemDtoList(order.getOrderItemList().stream().map(this::mapOrderItemToOrderItemDto).collect(Collectors.toList()));

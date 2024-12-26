@@ -46,6 +46,29 @@ dependencies {
 	implementation group: 'com.cloudinary', name: 'cloudinary-http5', version: '2.0.0'
 	implementation group: 'com.cloudinary', name: 'cloudinary-taglib', version: '2.0.0'
 
+	//open outh2
+	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+
+	//env
+	implementation 'me.paulschwarz:spring-dotenv:4.0.0'
+
+	//templating engine
+	implementation 'gg.jte:jte:3.1.12'
+
+	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+
+
+	//paypal
+	// https://mvnrepository.com/artifact/com.paypal.sdk/paypal-core
+	implementation group: 'com.paypal.sdk', name: 'paypal-core', version: '1.7.2'
+// https://mvnrepository.com/artifact/com.paypal.sdk/rest-api-sdk
+	implementation group: 'com.paypal.sdk', name: 'rest-api-sdk', version: '1.14.0'
+
+	//Stripe
+// https://mvnrepository.com/artifact/com.stripe/stripe-java
+	implementation group: 'com.stripe', name: 'stripe-java', version: '28.2.0'
+
+
 
 }
 

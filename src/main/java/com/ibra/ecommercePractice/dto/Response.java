@@ -2,9 +2,11 @@ package com.ibra.ecommercePractice.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.ibra.ecommercePractice.enums.OrderStatus;
+import com.ibra.ecommercePractice.model.Order;
 import lombok.Builder;
 import lombok.Data;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -36,4 +38,5 @@ public class Response {
     private List<OrderDto> orderDtoList;
 
     private OrderStatus orderStatus;
+
 }

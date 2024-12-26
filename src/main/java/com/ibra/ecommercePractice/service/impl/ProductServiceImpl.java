@@ -9,7 +9,7 @@ import com.ibra.ecommercePractice.model.Category;
 import com.ibra.ecommercePractice.model.Product;
 import com.ibra.ecommercePractice.repository.CategoryRepository;
 import com.ibra.ecommercePractice.repository.ProductRepository;
-import com.ibra.ecommercePractice.service.CloudinaryUploadService;
+import com.ibra.ecommercePractice.utility.cloudinary.CloudinaryUploadService;
 import com.ibra.ecommercePractice.service.interf.ProductService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Sort;
