@@ -39,4 +39,7 @@ public class Response {
 
     private OrderStatus orderStatus;
 
+    private String paymentUrl;
+    private String paymentMethod;
+
 }

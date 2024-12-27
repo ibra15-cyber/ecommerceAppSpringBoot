@@ -1,5 +1,6 @@
 package com.ibra.ecommercePractice.utility.payment;
 
+import com.ibra.ecommercePractice.dto.Response;
 import com.ibra.ecommercePractice.enums.OrderStatus;
 import com.ibra.ecommercePractice.model.User;
 import com.ibra.ecommercePractice.service.interf.OrderService;
@@ -12,6 +13,9 @@ import com.paypal.base.rest.PayPalRESTException;
 import com.stripe.exception.StripeException;
 import com.stripe.model.checkout.Session;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -51,7 +55,7 @@ public class PaymentController {
 
     @PreAuthorize("hasAuthority('USER')")
     @PostMapping("/pay")
-    public String payment(Model model) {
+    public ResponseEntity<Response> payment(Model model) {
         User user = userService.getLoginUser(); // Get the user that is signed in from the authentication token
 
 
@@ -70,17 +74,23 @@ public class PaymentController {
 
                 if ("paypal".equalsIgnoreCase(method)) {
                     return handlePayPalPayment(amount);
+//                    return ResponseEntity.status(HttpStatus.OK).body(Response.builder().paymentMethod(method).build());
                 } else if ("stripe".equalsIgnoreCase(method)) {
                     return processStripePayment(amount);
                 }
             }
-            return "redirect:/";
+//            return "redirect:/";
+            return ResponseEntity.status(HttpStatus.OK).body(Response.builder().paymentMethod("NO payment method found").build());
+
         }
-        return "redirect:/login";
+
+//        return "redirect:/login";
+        return ResponseEntity.status(HttpStatus.OK).body(Response.builder().paymentMethod("NO login user found").build());
+
     }
 
 
-    private String handlePayPalPayment(BigDecimal amount) {
+    private ResponseEntity<Response> handlePayPalPayment(BigDecimal amount) {
         Amount amountDetails = new Amount();
         amountDetails.setCurrency("USD");
         amountDetails.setTotal(String.format("%.2f", amount));
@@ -114,7 +124,8 @@ public class PaymentController {
                     //the code stops running here so I guess I have to improvise to get it to update the status
                     //usually it should be after
                     orderService.updateOrderStatus(order.getId(), OrderStatus.CONFIRMED);
-                    return "redirect:" + link.getHref();
+//                    return "redirect:" + link.getHref();
+                    return ResponseEntity.status(HttpStatus.OK).body(Response.builder().paymentUrl(link.getHref()).build());
                 }
             }
         } catch (PayPalRESTException e) {
@@ -125,24 +136,26 @@ public class PaymentController {
 //
 //        System.out.println("it didn't get here ........... " + order.getStatus());
 
-        return "redirect:/";
+//        return "redirect:/";
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Response.builder().paymentUrl("No url found").build());
     }
 
 
-    private String processStripePayment(BigDecimal amount) {
+    private ResponseEntity<Response> processStripePayment(BigDecimal amount) {
         try {
             Session session = stripeService.createCheckoutSession(amount);
             // Return the checkout URL directly
-
             System.out.println(session.getUrl());
-            return session.getUrl();
+            return ResponseEntity.status(HttpStatus.OK).body(Response.builder()
+                    .paymentUrl(session.getUrl())
+                    .build()
+            );
 
         } catch (StripeException e) {
             System.out.println(e.getMessage());
             e.printStackTrace();
         }
-
-        return "Payment creation failed";
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Response.builder().paymentUrl("No url found").build());
     }
 
     @GetMapping("/success")
