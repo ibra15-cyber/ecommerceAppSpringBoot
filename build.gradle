@@ -68,6 +68,14 @@ dependencies {
 // https://mvnrepository.com/artifact/com.stripe/stripe-java
 	implementation group: 'com.stripe', name: 'stripe-java', version: '28.2.0'
 
+	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+
+	// https://mvnrepository.com/artifact/redis.clients/jedis
+	implementation group: 'redis.clients', name: 'jedis', version: '5.2.0'
+
+	implementation 'org.springframework.boot:spring-boot-starter-cache'
+	implementation 'com.fasterxml.jackson.module:jackson-module-kotlin'
+
 
 
 }

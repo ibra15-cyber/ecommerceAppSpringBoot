@@ -59,17 +59,18 @@ public class PaymentController {
         User user = userService.getLoginUser(); // Get the user that is signed in from the authentication token
 
 
+        //user has to be logged in
         if (user != null) {
             List<Order> listOfOrders = user.getOrderList(); // Get the user's order list
-            Optional<Order> orderOpt = listOfOrders.stream().findAny();
+            Optional<Order> orderOpt = listOfOrders.stream().findAny(); //to be improved since in a async mode, he could put on diff orders using different payment system
 
             if (orderOpt.isPresent()) {
                 order = orderOpt.get();
-                System.out.print(order.getId());
-                BigDecimal amount = order.getTotalPrice();
-                System.out.println("amount....................................." + amount);
-                String method = order.getPayMethod();
-                System.out.println("method....................................." + method);
+//                System.out.print(order.getId());
+                BigDecimal amount = order.getTotalPrice(); //if order exist, give us the total price for the order
+//                System.out.println("amount....................................." + amount);
+                String method = order.getPayMethod(); //also give us the payment method
+//                System.out.println("method....................................." + method);
 
 
                 if ("paypal".equalsIgnoreCase(method)) {

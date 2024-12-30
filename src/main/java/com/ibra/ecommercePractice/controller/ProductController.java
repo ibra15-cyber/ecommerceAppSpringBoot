@@ -5,6 +5,10 @@ import com.ibra.ecommercePractice.dto.ProductDto;
 import com.ibra.ecommercePractice.dto.Response;
 import com.ibra.ecommercePractice.model.Product;
 import com.ibra.ecommercePractice.service.interf.ProductService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +29,21 @@ public class ProductController {
 
     public ProductController(ProductService productService) {
         this.productService = productService;
+    }
+
+
+    @Autowired
+    private RedisTemplate<String, Object> redisTemplate;
+
+    @PostMapping("/test")
+    public void testSerialization(ProductDto product) {
+        try {
+            redisTemplate.opsForValue().set("testKey", product);
+            Object result = redisTemplate.opsForValue().get("testKey");
+            System.out.println("Cached Object: " + result);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 

@@ -6,6 +6,8 @@ import com.ibra.ecommercePractice.model.Order;
 import lombok.Builder;
 import lombok.Data;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -13,7 +15,9 @@ import java.util.List;
 @Data
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class Response {
+public class Response implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 1L;
 
     private int status; //response status
     private String message;

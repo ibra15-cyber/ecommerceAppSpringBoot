@@ -12,7 +12,12 @@ import com.ibra.ecommercePractice.repository.ProductRepository;
 import com.ibra.ecommercePractice.utility.cloudinary.CloudinaryUploadService;
 import com.ibra.ecommercePractice.service.interf.ProductService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -86,8 +91,10 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Response getProductById(Long productDtoId) {
-        Product product = productRepository.findById(productDtoId).orElseThrow(()-> new NotFoundException("Product does not exist"));
+    @Cacheable(key = "#productId", value = "products")
+    public Response getProductById(Long productId) {
+        System.out.println("called getProductById from the DB");
+        Product product = productRepository.findById(productId).orElseThrow(()-> new NotFoundException("Product does not exist"));
         Category category = product.getCategory();
 
         ProductDto productDto = entityDtoMapper.mapProductToProductDto(product);
@@ -101,7 +108,10 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    @CachePut(value = "products", key = "#productDtoId")
     public Response updateProduct(Long productDtoId, ProductDto productDto) {
+        System.out.println("called update product from the DB");
+
         // video 7 12:40
         Product product = productRepository.findById(productDtoId).orElseThrow(()-> new NotFoundException("product does not exit"));
         Category category = product.getCategory();
@@ -122,7 +132,10 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    @CacheEvict(value = "products", key = "#productDtoId")
     public Response deleteProduct(Long productDtoId) {
+        System.out.println("called delete from the DB");
+
         Product product = productRepository.findById(productDtoId).orElseThrow(()-> new NotFoundException("product does not exit"));
 
         productRepository.delete(product);
